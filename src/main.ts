@@ -51,6 +51,7 @@ async function startWorkflow(): Promise<void> {
 
     const latestRunStatus = latestWorkflowRun?.status
     const latestRunConclusion = latestWorkflowRun?.conclusion
+    const latestRunBranch = latestWorkflowRun?.head_branch
 
     if (latestRunStatus === 'completed') {
       if (
@@ -62,11 +63,11 @@ async function startWorkflow(): Promise<void> {
         )
         break
       } else if (latestRunConclusion === 'failure') {
-        core.setFailed('Latest run of the given workflow was a failure')
+        core.setFailed(`Latest run of the given workflow in branch ${latestRunBranch} was a failure`)
         process.exit(1)
       } else {
         core.setFailed(
-          `Latest run of the given workflow was not successful [${latestRunStatus}]`
+          `Latest run of the given workflow in branch ${latestRunBranch} was not successful [${latestRunStatus}]`
         )
         process.exit(1)
       }
